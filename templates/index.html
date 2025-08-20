@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tiempo sin tumbar producción</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5rem;
+        }
+
+        #timer {
+            font-size: 2rem;
+            color: #555;
+            margin: 20px 0;
+        }
+
+        #blame {
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 12px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #blame .icon {
+            margin-right: 8px;
+            font-size: 1.4rem;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        let startTime = {{ start_time|tojson }};
+        let guilty = {{ guilty|tojson }};
+
+        function formatDuration(seconds) {
+            const days = Math.floor(seconds / 86400);
+            seconds %= 86400;
+            const hours = Math.floor(seconds / 3600);
+            seconds %= 3600;
+            const minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+
+            let parts = [];
+            if (days > 0) parts.push(`${days} day${days !== 1 ? 's' : ''}`);
+            if (hours > 0) parts.push(`${hours} hour${hours !== 1 ? 's' : ''}`);
+            if (minutes > 0) parts.push(`${minutes} minute${minutes !== 1 ? 's' : ''}`);
+            parts.push(`${seconds} second${seconds !== 1 ? 's' : ''}`);
+
+            return parts.join(', ');
+        }
+
+        function updateTimer() {
+            const now = Date.now() / 1000;
+            const elapsed = now - startTime;
+            document.getElementById('timer').textContent = formatDuration(elapsed);
+        }
+
+        window.onload = () => {
+            updateTimer();
+            document.getElementById('blame-text').textContent = `Culpable: ${guilty}`;
+        };
+
+        setInterval(updateTimer, 1000);
+    </script>
+</head>
+<body>
+    <h1>Tiempo sin tumbar producción</h1>
+    
+    <p id="timer">Loading...</p>
+    <form action="/reset" method="get">
+        <button type="submit">Restart Timer</button>
+    </form>
+    <p id="blame">
+        <span class="icon">🚨</span>
+        <span id="blame-text">Culpable: ...</span>
+    </p>
+
+</body>
+</html>
