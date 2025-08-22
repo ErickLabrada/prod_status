@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Tiempo sin tumbar producción</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/styles.css') }}">
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"
+      integrity="sha512-zhHQR0/H5SEBL3Wn6yYSaTTZej12z0hVZKOv3TwCUXT1z5qeqGcXJLLrbERYRScEDDpYIJhPC1fk31gqR783iQ=="
+      crossorigin="anonymous"
+      defer>
+    </script>
     <script>
         let startTime = {{ start_time|tojson }};
         let guilty = {{ guilty|tojson }};
@@ -51,5 +57,10 @@
         <span id="blame-text">Culpable: ...</span>
     </p>
 
+    <canvas id="glcanvas" width="40" height="40"></canvas>
+    <img id="max-img" src="/static/assets/img/jeje.png" alt="Max" srcset="">
+
 </body>
+<script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
 </html>

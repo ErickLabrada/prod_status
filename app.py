@@ -5,6 +5,9 @@ import json
 import os
 
 app = Flask(__name__)
+
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+
 DATA_FILE = 'data.json'
 
 def load_start_time():
